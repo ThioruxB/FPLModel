@@ -30,26 +30,17 @@ El flujo de trabajo se divide en varios scripts de Python:
 
 ## Uso
 
-Para obtener una nueva recomendación para la próxima jornada, sigue estos pasos:
+Para obtener una recomendación de equipo completa para la próxima jornada, solo necesitas ejecutar un único comando.
 
-1.  **Actualizar los Datos:** Ejecuta el pipeline principal para obtener los datos más recientes de la FPL.
+1.  **Instalar Dependencias (solo la primera vez):**
+    Asegúrate de tener todas las bibliotecas necesarias instaladas.
     ```bash
-    python fpl_pipeline.py
+    pip install -r requirements.txt
     ```
 
-2.  **Ejecutar el Modelado:** Prepara los datos para la predicción.
+2.  **Ejecutar el Proyecto:**
+    Este comando correrá todas las fases en orden y te mostrará la alineación final, capitán y suplentes.
     ```bash
-    python fase2_modelado.py
+    python run_project.py
     ```
 
-3.  **Generar Recomendaciones:** Entrena el modelo y genera las predicciones de xP.
-    ```bash
-    python fase3_recomendacion.py
-    ```
-
-4.  **Obtener Explicaciones y Equipo Final:** Ejecuta la fase final para ver el equipo recomendado con sus justificaciones.
-    ```bash
-    python fase4_explicacion.py
-    ```
-
-Después de ejecutar el paso 4, la consola mostrará la alineación titular, el capitán, el vicecapitán y los suplentes.

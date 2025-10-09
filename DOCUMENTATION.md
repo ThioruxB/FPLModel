@@ -8,9 +8,29 @@ Su objetivo es simple: **recomendarte el mejor equipo posible para la próxima j
 
 ---
 
-## 2. ¿Cómo Funciona? El Proceso en 4 Fases
+## 2. Cómo Ejecutar el Proyecto (Guía Rápida)
 
-Imagina el proceso como una línea de producción inteligente. Comienza con datos en bruto y termina con una recomendación de equipo lista para usar.
+Gracias al script maestro `run_project.py`, obtener una recomendación de equipo completa solo requiere dos pasos.
+
+1.  **Instalar Dependencias (solo la primera vez):**
+    Abre una terminal en el directorio del proyecto y ejecuta:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+2.  **Ejecutar el Proyecto:**
+    Una vez instaladas las dependencias, simplemente ejecuta el siguiente comando:
+    ```bash
+    python run_project.py
+    ```
+
+El script se encargará de todo el proceso y, al finalizar, te mostrará en la consola la alineación titular, el capitán, el vicecapitán y los suplentes para la jornada.
+
+---
+
+## 3. ¿Cómo Funciona por Dentro? El Proceso Detallado
+
+Para aquellos interesados en los detalles técnicos, el script `run_project.py` orquesta una línea de producción inteligente de 4 fases.
 
 ### Fase 1: Recopilación de Datos (El Observador)
 
@@ -25,35 +45,32 @@ En esta primera fase, el sistema se conecta directamente a la base de datos ofic
 
 ### Fase 2: Creación de Métricas Clave (El Analista)
 
-Una vez que tenemos los datos, el siguiente paso es darles sentido. No solo queremos saber *qué* hizo un jugador, sino entender *cómo* podría rendir en el futuro. Para ello, el sistema calcula métricas más inteligentes:
+Una vez que tenemos los datos, el siguiente paso es darles sentido. Para ello, el sistema calcula métricas más inteligentes:
 
-- **Estado de Forma (`form`):** En lugar de mirar los puntos totales, calculamos un promedio de los puntos que un jugador ha conseguido en sus últimos 5 partidos. Esto nos dice si el jugador está "en racha" o en un bache.
-- **Dificultad del Próximo Partido (`difficulty`):** No todos los oponentes son iguales. El sistema asigna una puntuación de dificultad a cada partido basándose en la fortaleza del equipo rival. Un partido contra un equipo fuerte tiene una dificultad alta, y viceversa.
-- **Valor (Calidad-Precio):** ¿Es un jugador caro pero vale cada millón? Esta métrica relaciona el rendimiento de un jugador con su precio para encontrar las "gangas" del mercado.
+- **Estado de Forma (`form`):** Un promedio de los puntos que un jugador ha conseguido en sus últimos 5 partidos. Esto nos dice si el jugador está "en racha".
+- **Dificultad del Próximo Partido (`difficulty`):** Una puntuación de dificultad para cada partido basándose en la fortaleza del equipo rival.
+- **Valor (Calidad-Precio):** Relaciona el rendimiento de un jugador con su precio para encontrar las "gangas" del mercado.
 
 > **En resumen:** Esta fase transforma datos básicos en conocimiento táctico. Nos dice quién está en forma, quién tiene un partido favorable y quién ofrece el mejor retorno de inversión.
 
 ### Fase 3: Predicción del Futuro (El Oráculo)
 
-Aquí es donde entra en juego el **Machine Learning**. El sistema utiliza un modelo predictivo avanzado que ha sido entrenado con miles de datos de partidos históricos.
+Aquí es donde entra en juego el **Machine Learning**. El sistema utiliza un modelo predictivo que ha sido entrenado con miles de datos de partidos históricos para identificar qué patrones conducen a una alta puntuación.
 
-- **¿Cómo funciona?** El modelo ha aprendido a identificar qué patrones conducen a una alta puntuación. Por ejemplo, ha aprendido que un delantero que está "en forma" y juega en casa contra un rival con una "dificultad baja" tiene una alta probabilidad de marcar muchos puntos.
 - **El Resultado:** Para cada jugador de la liga, el sistema genera una predicción: los **"Puntos Esperados" (xP)** para la próxima jornada.
 
-> **En resumen:** Esta fase es el corazón predictivo del sistema. Nos da una estimación numérica del rendimiento probable de cada jugador en su siguiente partido.
+> **En resumen:** Esta fase es el corazón predictivo del sistema. Nos da una estimación numérica del rendimiento probable de cada jugador.
 
 ### Fase 4: Construcción del Equipo Ideal (El Director Técnico)
 
-Con las predicciones de `xP` para todos los jugadores, llegamos al paso final: armar el "dream team".
+Con las predicciones de `xP`, el sistema utiliza **optimización matemática** para encontrar la única combinación de 15 jugadores que logra la **máxima puntuación total de `xP`** sin salirse del presupuesto y respetando todas las reglas del juego.
 
-- **El Desafío:** Hay trillones de combinaciones de equipos posibles. Encontrar la mejor manualmente es imposible.
-- **La Solución:** El sistema utiliza **optimización matemática** (un solucionador de problemas complejos) para encontrar la única combinación de 15 jugadores que logra la **máxima puntuación total de `xP`** sin salirse del presupuesto y respetando todas las reglas del juego (2 porteros, 5 defensas, 5 medios, 3 delanteros, y no más de 3 jugadores del mismo club).
-- **La Explicación:** Finalmente, para que la decisión no sea una "caja negra", el sistema genera una justificación en lenguaje claro para cada jugador elegido, explicando por qué es una buena opción (ej. "tiene un gran estado de forma y un partido fácil").
+- **La Explicación:** Finalmente, genera una justificación en lenguaje claro para cada jugador elegido, explicando por qué es una buena opción.
 
 > **En resumen:** Esta fase final actúa como un director técnico de clase mundial, seleccionando la plantilla óptima basada en datos y explicando la lógica detrás de cada elección.
 
 ---
-## 5. Cómo Convertir a Word
+## 4. Cómo Convertir a Word
 
 Para convertir este archivo a un documento de Word:
 
