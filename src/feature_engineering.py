@@ -10,10 +10,10 @@ from collections import Counter
 def get_data():
     # Cargar el CSV principal
     try:
-        main_df = pd.read_csv('resultados.csv')
+        main_df = pd.read_csv('data/resultados.csv')
         # print("Archivo 'resultados.csv' cargado exitosamente.")
     except FileNotFoundError:
-        print("Error: No se encontró el archivo 'resultados.csv'. Ejecuta fpl_pipeline.py primero.")
+        print("Error: No se encontró el archivo 'data/resultados.csv'. Ejecuta fpl_pipeline.py primero.")
         return None, None
 
     # Conectar a la base de datos para obtener el historial
@@ -146,7 +146,7 @@ if __name__ == '__main__':
         # except UnicodeEncodeError:
         #     print("No se pudo mostrar el dataframe en la consola por problemas de codificación, pero los datos se guardaron en el archivo CSV.")
 
-        final_df.to_csv('resultados_fase2.csv', index=False, encoding='utf-8-sig')
+        final_df.to_csv('data/resultados_fase2.csv', index=False, encoding='utf-8-sig')
         # print("\nResultados guardados en 'resultados_fase2.csv'")
 
         # --- Ejecutar Optimización --- #

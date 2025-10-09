@@ -7,13 +7,13 @@ import os
 # --- Configuración de las Fases del Proyecto ---
 # Lista de tuplas, donde cada tupla contiene el nombre del script y un mensaje para el usuario.
 PHASES = [
-    ('fpl_pipeline.py', 'Fase 1: Extrayendo y actualizando datos de la FPL...'),
-    ('fase2_modelado.py', 'Fase 2: Calculando métricas avanzadas (forma, dificultad)...'),
-    ('fase3_recomendacion.py', 'Fase 3: Entrenando modelo y prediciendo puntos (xP)...'),
-    ('fase4_explicacion.py', 'Fase 4: Seleccionando equipo ideal y generando explicaciones...')
+    ('src/data_pipeline.py', 'Fase 1: Extrayendo y actualizando datos de la FPL...'),
+    ('src/feature_engineering.py', 'Fase 2: Calculando métricas avanzadas (forma, dificultad)...'),
+    ('src/model_training.py', 'Fase 3: Entrenando modelo y prediciendo puntos (xP)...'),
+    ('src/team_selection.py', 'Fase 4: Seleccionando equipo ideal y generando explicaciones...')
 ]
 
-FINAL_TEAM_FILE = 'equipo_ideal.csv'
+FINAL_TEAM_FILE = 'data/equipo_ideal.csv'
 
 def run_phase(script_name, description):
     """Ejecuta un script de Python como una fase del pipeline y maneja los errores."""

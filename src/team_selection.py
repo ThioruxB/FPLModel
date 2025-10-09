@@ -7,13 +7,10 @@ import codecs
 def load_data():
     print("--- Cargando datos de la Fase 3 ---")
     try:
-        df = pd.read_csv('resultados_fase3.csv')
-        print("Archivo 'resultados_fase3.csv' cargado exitosamente.")
-        df['xP'].fillna(0, inplace=True)
-        df['Precio'].fillna(df['Precio'].median(), inplace=True)
-        return df
+        df = pd.read_csv('data/resultados_fase3.csv')
+        print("Archivo 'data/resultados_fase3.csv' cargado exitosamente.")
     except FileNotFoundError:
-        print("Error: No se encontró el archivo 'resultados_fase3.csv'. Ejecuta las fases anteriores primero.")
+        print("Error: No se encontró el archivo 'data/resultados_fase3.csv'. Ejecuta las fases anteriores primero.")
         return None
 
 # --- 2. Generar Explicación Mejorada ---
@@ -101,7 +98,7 @@ if __name__ == '__main__':
             print(f"xP Total: {total_xp:.2f}")
             
             # Guardar el equipo ideal en un archivo CSV para ser usado por otros scripts
-            ideal_team_df.to_csv('equipo_ideal.csv', index=False, encoding='utf-8-sig')
-            print("\nEl equipo ideal ha sido guardado en 'equipo_ideal.csv'")
+            ideal_team_df.to_csv('data/equipo_ideal.csv', index=False, encoding='utf-8-sig')
+            print("\nEl equipo ideal ha sido guardado en 'data/equipo_ideal.csv'")
         else:
             print("No se pudo generar un equipo ideal con los datos proporcionados.")

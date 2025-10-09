@@ -14,10 +14,10 @@ import codecs
 def get_data():
     print("--- Cargando datos de fases anteriores ---")
     try:
-        current_df = pd.read_csv('resultados_fase2.csv')
-        print("Archivo 'resultados_fase2.csv' cargado exitosamente.")
+        current_df = pd.read_csv('data/resultados_fase2.csv')
+        print("Archivo 'data/resultados_fase2.csv' cargado exitosamente.")
     except FileNotFoundError:
-        print("Error: No se encontró el archivo 'resultados_fase2.csv'. Ejecuta fase2_modelado.py primero.")
+        print("Error: No se encontró el archivo 'data/resultados_fase2.csv'. Ejecuta feature_engineering.py primero.")
         return None, None
 
     db_url = 'postgresql://neondb_owner:npg_siXJHlLYwC10@ep-muddy-mode-ad05g277-pooler.c-2.us-east-1.aws.neon.tech/neondb'
@@ -148,8 +148,8 @@ if __name__ == '__main__':
         print("\n--- Top 15 Jugadores por Puntos Esperados (xP) ---")
         print(data_with_xp.sort_values('xP', ascending=False).head(15)[['Nombre', 'Apellido', 'team_name', 'Posicion', 'form', 'difficulty', 'xP']].to_string())
 
-        data_with_xp.to_csv('resultados_fase3.csv', index=False, encoding='utf-8-sig')
-        print("\nResultados de la Fase 3 guardados en 'resultados_fase3.csv'")
+        data_with_xp.to_csv('data/resultados_fase3.csv', index=False, encoding='utf-8-sig')
+        print("\nResultados de la Fase 3 guardados en 'data/resultados_fase3.csv'")
 
         if 'xP' in data_with_xp.columns and data_with_xp['xP'].sum() > 0:
             select_ideal_team(data_with_xp, objective_col='xP')
