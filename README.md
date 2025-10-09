@@ -6,11 +6,11 @@
     <td align="center"><b>Detalle de Jugadores</b></td>
   </tr>
   <tr>
-    <td>!(outputs/demos1.png)
-</td>
+    <td><img src="outputs/demos1.png" alt="Demo 1" width="420"></td>
     <td><img src="outputs/demos2.png" alt="Demo 2" width="420"></td>
   </tr>
 </table>
+
 
 Este proyecto es un sistema de análisis de datos y machine learning diseñado para ayudar a los jugadores de Fantasy Premier League (FPL) a construir un equipo óptimo. El sistema extrae datos de la FPL, predice los puntos esperados (xP) de cada jugador y utiliza optimización matemática para recomendar un equipo ideal que maximiza la puntuación total dentro del presupuesto.
 
