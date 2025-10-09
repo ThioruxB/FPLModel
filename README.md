@@ -6,8 +6,8 @@
     <td align="center"><b>Detalle de Jugadores</b></td>
   </tr>
   <tr>
-    <td><img src="outputs/demos1.png" alt="Demo 1" width="420"></td>
-    <td><img src="outputs/demos2.png" alt="Demo 2" width="420"></td>
+    <td><img src="img/demos1.png" alt="Demo 1" width="420"></td>
+    <td><img src="img/demos2.png" alt="Demo 2" width="420"></td>
   </tr>
 </table>
 
