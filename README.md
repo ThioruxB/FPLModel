@@ -72,6 +72,13 @@ Para obtener una nueva recomendación de equipo, sigue estos pasos:
 
 El sistema utiliza una base de datos PostgreSQL, alojada en [Neon](https://neon.tech/), para almacenar los datos históricos de jugadores y equipos. La configuración de la conexión está definida directamente en los scripts de la carpeta `src`. Si deseas utilizar tu propia base de datos, deberás actualizar la cadena de conexión en dichos archivos.
 
+### Scripts de Datos Históricos
+
+Adicionalmente, se han añadido scripts para trabajar con datos históricos de los jugadores:
+
+-   `scripts/get_all_players_history_resumable.py`: Extrae de la API de FPL las estadísticas agregadas de las últimas dos temporadas de la carrera de cada jugador y las guarda en `all_players_history_resumable.csv`. El script es reanudable.
+-   `scripts/upload_season_history.py`: Sube los datos del CSV anterior a una tabla `player_season_history` en la base de datos, diseñada para almacenar este historial.
+
 ---
 
 ## Diccionario de Datos de la Base de Datos
@@ -149,3 +156,16 @@ Almacena el rendimiento detallado de un jugador en cada partido que ha jugado.
 | `assists`       | `bigint`     | Asistencias realizadas en el partido.                                    |
 | `bps`           | `bigint`     | Puntuación en el "Bonus Points System" para ese partido.                 |
 | `value`         | `bigint`     | Precio del jugador en esa jornada, multiplicado por 10.                  |
+
+### Tabla: `player_season_history`
+Almacena el rendimiento agregado de un jugador para una temporada completa.
+
+| Columna         | Tipo de Dato | Descripción                                                              |
+| --------------- | ------------ | ------------------------------------------------------------------------ |
+| `player_id`     | `INT`        | ID del jugador al que pertenece el registro.                             |
+| `player_name`   | `VARCHAR`    | Nombre completo del jugador en el momento del registro.                  |
+| `season_name`   | `VARCHAR`    | Nombre de la temporada (ej. "2023/24").                                  |
+| `total_points`  | `INT`        | Puntos totales que el jugador anotó en esa temporada.                    |
+| `minutes`       | `INT`        | Minutos jugados en la temporada.                                           |
+| `goals_scored`  | `INT`        | Goles anotados en la temporada.                                            |
+| `assists`       | `INT`        | Asistencias realizadas en la temporada.                                    |

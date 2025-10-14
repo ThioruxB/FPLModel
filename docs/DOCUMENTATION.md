@@ -123,3 +123,56 @@ Cada fase del pipeline es un script independiente dentro de la carpeta `src/`, d
     2. Resuelve un **problema de optimización matemática** para encontrar la combinación de 15 jugadores que maximiza el `xP` total, sujeto a las restricciones de presupuesto y formación de FPL.
     3. Genera una explicación basada en reglas para cada jugador seleccionado.
     4. Guarda el equipo final en `data/equipo_ideal.csv` y lo muestra en consola.
+
+---
+
+## 6. Scripts de Datos Históricos
+
+Se han desarrollado scripts adicionales, ubicados en la carpeta `scripts/`, para la extracción y gestión de datos históricos de rendimiento de los jugadores a lo largo de diferentes temporadas.
+
+### 6.1. Extracción de Historial por Temporada (`scripts/get_all_players_history_resumable.py`)
+
+-   **Propósito:** Este script extrae de la API de FPL las estadísticas agregadas por temporada para todos los jugadores. Específicamente, guarda las últimas dos temporadas registradas en la carrera de cada jugador.
+-   **Salida:** Genera un archivo `all_players_history_resumable.csv` en el directorio raíz del proyecto.
+-   **Características:**
+    -   **Reanudable:** Si el script es interrumpido, al volver a ejecutarlo, continuará desde donde se quedó, sin perder el progreso.
+    -   **Respetuoso con la API:** Incluye una pausa de 1 segundo entre solicitudes para evitar el bloqueo de la API.
+-   **Uso:**
+    ```bash
+    python scripts/get_all_players_history_resumable.py
+    ```
+
+### 6.2. Carga de Historial a la Base de Datos (`scripts/upload_season_history.py`)
+
+-   **Propósito:** Sube los datos del archivo CSV generado por el script anterior a una tabla permanente en la base de datos Neon.
+-   **Proceso:**
+    1.  Se conecta a la base de datos usando la configuración del proyecto.
+    2.  Asegura que la tabla `player_season_history` exista. Si no, la crea con la estructura adecuada.
+    3.  Utiliza una estrategia de "upsert" (actualizar o insertar) para cargar los datos. Esto evita la creación de registros duplicados si el script se ejecuta varias veces.
+    4.  Este proceso es seguro y no afecta a ninguna otra tabla de la base de datos.
+-   **Uso:**
+    ```bash
+    python scripts/upload_season_history.py
+    ```
+
+### 6.3. Esquema de la Tabla `player_season_history`
+
+Esta es la estructura de la tabla creada para almacenar los datos históricos por temporada.
+
+```sql
+CREATE TABLE IF NOT EXISTS player_season_history (
+    player_id INT,
+    player_name VARCHAR(255),
+    season_name VARCHAR(50),
+    total_points INT,
+    minutes INT,
+    goals_scored INT,
+    assists INT,
+    clean_sheets INT,
+    goals_conceded INT,
+    bonus INT,
+    yellow_cards INT,
+    red_cards INT,
+    PRIMARY KEY (player_id, season_name)
+);
+```
