@@ -126,7 +126,149 @@ Cada fase del pipeline es un script independiente dentro de la carpeta `src/`, d
 
 ---
 
-## 6. Scripts de Datos Históricos
+## 6. Extracción de Datos de Partidos y Carga a la Base de Datos (Scraping)
+
+Además del pipeline de FPL, el proyecto incluye un sistema para extraer datos detallados de partidos de WhoScored.com, procesarlos y cargarlos en la base de datos PostgreSQL. Este proceso es fundamental para análisis más profundos a nivel de evento.
+
+### 6.1. Proceso de Web Scraping
+
+El web scraping se centra en la extracción de datos de un partido específico desde WhoScored.
+
+-   **Fuente de Datos**: El archivo `pag3.json` contiene una representación DOM del HTML de la página de un partido de WhoScored. Dentro de este JSON se encuentra un bloque de script con todos los datos del partido (eventos, jugadores, formaciones, etc.).
+-   **Extracción**: El script `insert_data_to_db.py` lee `pag3.json`, localiza y extrae el objeto JavaScript que contiene los datos del partido.
+-   **Procesamiento**: Los datos extraídos se limpian, procesan y estructuran en DataFrames de pandas para su posterior inserción en la base de datos.
+
+### 6.2. Script de Inserción de Datos (`insert_data_to_db.py`)
+
+Este script es el responsable de orquestar todo el proceso de scraping y carga de datos a la base de datos.
+
+-   **Propósito**: Extraer los datos del archivo `pag3.json`, crear el esquema de tablas necesario en la base de datos y cargar los datos del partido.
+-   **Proceso**:
+    1.  **Conexión a la BD**: Se conecta a la base de datos PostgreSQL definida en `DATABASE_URL`.
+    2.  **Creación de Tablas**: Ejecuta sentencias `CREATE TABLE IF NOT EXISTS` para asegurar que las tablas `equipos`, `jugadores`, `partidos`, `eventos` y `formaciones` existan.
+    3.  **Extracción de Datos**: Lee y procesa el archivo `pag3.json` para obtener los datos del partido.
+    4.  **Inserción de Datos**: Inserta los datos en las tablas en el orden correcto para respetar las restricciones de llaves foráneas:
+        -   `equipos`
+        -   `jugadores`
+        -   `partidos`
+        -   `formaciones`
+        -   `eventos`
+-   **Uso**:
+    ```bash
+    python insert_data_to_db.py
+    ```
+
+### 6.3. Esquema de la Base de Datos de Scraping
+
+A continuación se detalla el esquema de las tablas creadas por el script `insert_data_to_db.py`.
+
+#### Tabla: `equipos`
+```sql
+CREATE TABLE IF NOT EXISTS equipos (
+    id_equipo BIGINT PRIMARY KEY,
+    nombre_equipo VARCHAR(255) NOT NULL
+);
+```
+
+#### Tabla: `jugadores`
+```sql
+CREATE TABLE IF NOT EXISTS jugadores (
+    id_jugador BIGINT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    numero_camiseta INTEGER,
+    posicion VARCHAR(50),
+    altura INTEGER,
+    peso INTEGER,
+    edad INTEGER,
+    es_titular BOOLEAN,
+    es_hombre_del_partido BOOLEAN,
+    campo VARCHAR(50),
+    id_equipo BIGINT NOT NULL,
+    FOREIGN KEY (id_equipo) REFERENCES equipos(id_equipo)
+);
+```
+
+#### Tabla: `partidos`
+```sql
+CREATE TABLE IF NOT EXISTS partidos (
+    id_partido BIGINT PRIMARY KEY,
+    id_equipo_local BIGINT NOT NULL,
+    id_equipo_visitante BIGINT NOT NULL,
+    marcador VARCHAR(10),
+    marcador_medio_tiempo VARCHAR(10),
+    marcador_tiempo_completo VARCHAR(10),
+    tiempo_transcurrido VARCHAR(50),
+    hora_inicio TIMESTAMP,
+    fecha_inicio DATE,
+    asistencia INTEGER,
+    nombre_estadio VARCHAR(255),
+    nombre_arbitro VARCHAR(255),
+    apellido_arbitro VARCHAR(255),
+    codigo_clima VARCHAR(50),
+    FOREIGN KEY (id_equipo_local) REFERENCES equipos(id_equipo),
+    FOREIGN KEY (id_equipo_visitante) REFERENCES equipos(id_equipo)
+);
+```
+
+#### Tabla: `eventos`
+```sql
+CREATE TABLE IF NOT EXISTS eventos (
+    id_evento BIGINT PRIMARY KEY,
+    id_partido BIGINT NOT NULL,
+    minuto INTEGER,
+    segundo INTEGER,
+    id_equipo BIGINT NOT NULL,
+    id_jugador BIGINT,
+    x NUMERIC(5,2),
+    y NUMERIC(5,2),
+    minuto_expandido INTEGER,
+    periodo VARCHAR(50),
+    tipo VARCHAR(50),
+    tipo_resultado VARCHAR(50),
+    calificadores TEXT,
+    tipos_eventos_satisfechos TEXT,
+    es_toque BOOLEAN,
+    fin_x NUMERIC(5,2),
+    fin_y NUMERIC(5,2),
+    id_evento_relacionado BIGINT,
+    id_jugador_relacionado BIGINT,
+    x_bloqueado NUMERIC(5,2),
+    y_bloqueado NUMERIC(5,2),
+    z_boca_porteria NUMERIC(5,2),
+    y_boca_porteria NUMERIC(5,2),
+    es_disparo BOOLEAN,
+    es_gol BOOLEAN,
+    tipo_tarjeta VARCHAR(50),
+    FOREIGN KEY (id_partido) REFERENCES partidos(id_partido),
+    FOREIGN KEY (id_equipo) REFERENCES equipos(id_equipo),
+    FOREIGN KEY (id_jugador) REFERENCES jugadores(id_jugador),
+    FOREIGN KEY (id_evento_relacionado) REFERENCES eventos(id_evento),
+    FOREIGN KEY (id_jugador_relacionado) REFERENCES jugadores(id_jugador)
+);
+```
+
+#### Tabla: `formaciones`
+```sql
+CREATE TABLE IF NOT EXISTS formaciones (
+    id_formacion BIGSERIAL PRIMARY KEY,
+    id_partido BIGINT NOT NULL,
+    id_equipo BIGINT NOT NULL,
+    nombre_formacion VARCHAR(50),
+    id_jugador_capitan BIGINT,
+    periodo VARCHAR(50),
+    minuto_inicio_expandido INTEGER,
+    minuto_fin_expandido INTEGER,
+    numeros_camiseta TEXT,
+    slots_formacion TEXT,
+    ids_jugadores TEXT,
+    posiciones_formacion TEXT,
+    FOREIGN KEY (id_partido) REFERENCES partidos(id_partido),
+    FOREIGN KEY (id_equipo) REFERENCES equipos(id_equipo),
+    FOREIGN KEY (id_jugador_capitan) REFERENCES jugadores(id_jugador)
+);
+```
+
+## 7. Scripts de Datos Históricos
 
 Se han desarrollado scripts adicionales, ubicados en la carpeta `scripts/`, para la extracción y gestión de datos históricos de rendimiento de los jugadores a lo largo de diferentes temporadas.
 

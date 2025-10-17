@@ -5,3 +5,6 @@ psycopg2-binary
 scikit-learn
 pulp
 requests
+matplotlib
+seaborn
+beautifulsoup4

@@ -68,6 +68,19 @@ Para obtener una nueva recomendación de equipo, sigue estos pasos:
     python run_project.py
     ```
 
+### Scraping de Datos de Partidos
+
+El proyecto también incluye un script para realizar web scraping de datos detallados de un partido desde WhoScored.com y cargarlos en la base de datos.
+
+-   **Fuente de Datos**: `pag3.json`, que contiene los datos de un partido.
+-   **Script**: `insert_data_to_db.py`
+
+Para ejecutar este proceso, utiliza el siguiente comando:
+
+```bash
+python insert_data_to_db.py
+```
+
 ## Base de Datos
 
 El sistema utiliza una base de datos PostgreSQL, alojada en [Neon](https://neon.tech/), para almacenar los datos históricos de jugadores y equipos. La configuración de la conexión está definida directamente en los scripts de la carpeta `src`. Si deseas utilizar tu propia base de datos, deberás actualizar la cadena de conexión en dichos archivos.
